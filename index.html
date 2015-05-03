@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Vert.x - High Performance Application Platform for the JVM</title>
+
+		<meta name="description" content="Scalable, High Performance Application Platform for the JVM<">
+		<meta name="author" content="Daniel Jahre">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Vert.x</h1>
+					<h3>High Performance Application Platform for the JVM</h3>
+					<p>
+						<small>Created by <a href="http://linuxwochen.at">Daniel Jahre</a> </small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Features</h2>
+					<ul>
+						<li class="fragment">Polyglott programming</li>
+						<li class="fragment">Concurrency</li>
+						<li class="fragment">Scalability</li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h2>NodeJS</h2>
+					<ul>
+                        <li class="fragment">Inspired by ...</li>
+						<ul>
+							<li class="fragment">Event driven programming</li>
+							<li class="fragment">Super Simple Concurrency model</li>
+							<li class="fragment">Event Bus</li>
+							<li class="fragment">Module System & Public Module Repository</li>
+						</ul>
+
+                    </ul>
+				</section>
+
+				<section>
+					<h2>History</h2>
+					<ul>
+						<li class="fragment">started in 2011 by Tim Fox (VMware, now works at RedHat) as Node.x</li>
+						<li class="fragment">2012 Release 1.0</li>
+						<li class="fragment">2013 Vert.x moved to Eclipse Foundation and release 2.0 got ready.</li>
+						<li class="fragment">Nov 2014 Release 2.1.5</li>
+						<li class="fragment">Release 3 WIP (planned for June 2015</li>
+						<li class="fragment">All code is on github.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Used Libraries</h2>
+					<ul>
+						<li class="fragment">Netty</li>
+						<li class="fragment">Hazelcast</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Languages</h2>
+					<ul>
+						<li class="fragment">Java</li>
+						<li class="fragment">Groovy</li>
+						<li class="fragment">Ruby</li>
+						<li class="fragment">Python</li>
+						<li class="fragment">Scala</li>
+						<li class="fragment">Clojure</li>
+						<li class="fragment">Ceylon</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Vert.x Terminology</h2>
+				</section>
+
+				<section>
+					<h2>Verticle</h2>
+					<ul>
+						<li class="fragment">"Class with a main method"</li>
+						<li class="fragment">Can include other scripts referred to by the main method</li>
+						<li class="fragment">Can include jar files and resources</li>
+						<li class="fragment">An application consists of one or more Verticles communicating over the event bus.</li>
+						<li class="fragment">Worker Verticles are intended for blocking operations, using different thread pool</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Vert.x Instance</h2>
+					<ul>
+                        <li class="fragment">Basically the instance of the jvm</li>
+                        <li class="fragment">Each verticle can have its own classloader</li>
+                        <li class="fragment">Verticles can run on a single instance or on multiple instances</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Concurrency</h2>
+					<ul>
+                        <li class="fragment">Each verticle runs in a single thread</li>
+						<li class="fragment">A Verticle can be started with multiple instances.</li>
+                        <li class="fragment">Verticles communicate by message passing</li>
+					</ul>
+
+				</section>
+
+				<section>
+					<h2>Shared data</h2>
+					<ul>
+						<li class="fragment">Global accessible shared map</li>
+						<li class="fragment">Shared maps can only be shared in one instance</li>
+					</ul>
+
+				</section>
+
+				<section>
+					<h2>Event based programming & Event loops</h2>
+					<ul>
+						<li class="fragment">Event handlers</li>
+						<li class="fragment">Each thread executes Event loop, to call handlers</li>
+						<li class="fragment">Blocking operations are done in Worker verticles, using a different threadpool</li>
+						<li class="fragment">Event loop should never be blocked</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Event bus</h2>
+					<ul>
+						<li class="fragment">Verticles send and receive messages over the event bus</li>
+						<li class="fragment">Point to point, Publish/Subscribe, Request/Response </li>
+						<li class="fragment">strings, buffers, primitive types</li>
+						<li class="fragment">Recommended: JSON, can be consumed by every supported language</li>
+					</ul>
+
+				</section>
+
+
+				<section>
+					<h2>Clustered Event Bus</h2>
+					<ul>
+						<li class="fragment">Connects Verticles on different JVM instances</li>
+						<li class="fragment">using Hazelcast as a default, other implementations planned for 3.x</li>
+						<li class="fragment">Event bus extends to Client side too via Javascript</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Modules</h2>
+                    <ul>
+                        <li class="fragment">Encapsulate code and resources</li>
+						<li class="fragment">One or more modules per application</li>
+						<li class="fragment">mod.json</li>
+						<li class="fragment">Can be runnable or non-runnable</li>
+						<li class="fragemen">vendor~module-name~version</li>
+                    </ul>
+                </section>
+
+				<section>
+					<h2>Fatjar</h2>
+					<ul>
+						<li class="fragment">combines vert.x runtime, dependencies and the module into a jar</li>
+						<li class="fragment">can be executed with java -jar</li>
+						<li class="fragment">no other deployment needed</li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h2>Hello World (Javascript)</h2>
+					<li class="fragment">Simple HTTP Server
+					<pre><code data-trim>
+						      var vertx = require('vertx');
+
+vertx.createHttpServer().requestHandler(function(req) {
+  req.response.end("Hello World!");
+}).listen(8080, 'localhost');
+
+					</code></pre>
+						</li>
+
+					<li class="fragment">Just run from the commandline
+					<pre><code data-trim>
+						       vertx run server.js
+					</code></pre>
+					</li>
+				</section>
+
+				<section>
+					<h2>SockJS - Example</h2>
+				</section>
+
+				<section>
+					<h2>Prerequisites</h2>
+					<ul>
+						<li class="fragment"><a href="https://github.com/sockjs/sockjs-client/tree/master/dist">SockJS library (Javascript)</a></li>
+						<li class="fragment">vertxbus.js - from Vert.x distribution</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>DateSender Verticle</h2>
+					<pre><code data-trim>
+						                 package linuxwochen
+
+def eb = vertx.eventBus
+
+def timerId = vertx.setPeriodic(1000) {
+    timerId ->
+        eb.publish("datetimeupdate", new Date().toString())
+    }
+
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>SockSJServer Verticle</h2>
+					<pre><code data-trim>
+						package linuxwochen
+
+def server = vertx.createHttpServer()
+
+def config = ["prefix": "/eventbus"]
+def eb = vertx.eventBus
+
+container.deployVerticle("DateSender.groovy")
+
+eb.registerHandler("datetimeupdate", {
+    message -> println("${message.body}")
+} )
+
+eb.registerHandler("browser", {
+    message -> println("browser connected:" +
+				new Date().toString() +
+				": ${message.body}")
+
+})
+
+server.requestHandler { req  ->
+    def file = req.path == "/" ? "sockjsclient.html" : req.path
+    //attention, might be escaped ..
+    req.response.sendFile("./" + file)
+}
+
+vertx.createSockJSServer(server).bridge(config, [[:]], [[:]])
+
+server.listen(8080)
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Manual example for securing a bridge</h2>
+					<pre>
+						<code data-trim>
+							    def server = vertx.createHttpServer()
+
+def config = ["prefix": "/eventbus"]
+
+// This defines the matches for client --> server traffic
+def inboundPermitted = []
+
+// Let through any messages sent to 'demo.orderMgr'
+inboundPermitted << ["address": "demo.orderMgr"]
+
+// Allow messages to the address 'demo.persistor' as long as the messages
+// have an action field with value 'find' and a collection field with value
+// 'albums'
+inboundPermitted << ["address": "demo.persistor",
+                     "match": [ "action": "find",
+                                "collection": "albums"]]
+
+// Allow through any message with a field `wibble` with value `foo`.
+inboundPermitted << ["match", ["wibble": "foo"]]
+
+// This defines the matches for server --> client traffic
+def outboundPermitted = []
+
+// Let through any messages from address "ticker.mystock"
+outboundPermitted << ["address": "ticker.mystock"]
+
+// Let through any messages from addresses starting with "news." (e.g. news.europe, news.usa, etc)
+outboundPermitted << ["address_re": "news\\..+"]
+
+vertx.createSockJSBridge(server).bridge(config, inboundPermitted, outboundPermitted)
+
+server.listen(8080)
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h2>Client side Javascript code</h2>
+					<pre><code data-trim>
+						 <script src="js/sockjs.min.js"></script>
+<script src="js/vertxbus-2.1.js"></script>
+
+<h1>Vert.x Example</h1>
+
+<div id="vertx-created"></div>
+<div id="timestamp"></div>
+
+<script language="JavaScript">
+        var eb;
+
+        eb = new vertx.EventBus('http://localhost:8080/eventbus');
+        document.getElementById("vertx-created").innerHTML = "vertx bus created";
+
+        eb.onopen = function () {
+
+            eb.send('browser', 'sockjsclient');
+
+            eb.registerHandler('datetimeupdate', function (message) {
+                document.getElementById("timestamp").innerHTML = "received a message: " + message;
+                console.log("received a message: " + message);
+            });
+
+            eb.onclose = function () {
+                eb = null;
+            };
+    }
+</script>
+					</code></pre>
+				</section>
+
+
+
+				<section>
+					<h2>Programming comfort</h2>
+					<ul>
+                        <li class="fragment">Vert.x can run Java source files</li>
+                        <li class="fragment">Hot reloading of classes can be activated for module development</li>
+                        <li class="fragment">Maven and Gradle templates available</li>
+                    </ul>
+				</section>
+
+				<section>
+					<h2>Vert.x 3</h2>
+					<ul>
+						<li class="fragment">Apex - Webframework around Vert.x</li>
+						<li class="fragment">RxJava API</li>
+						<li class="fragment">New cluster managers</li>
+						<li class="fragment"><a href="https://github.com/vert-x3/wiki/wiki/Vert.x-Roadmap">Roadmap</a> </li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h2>Links</h2>
+					<ul>
+						<li><a href="http://vertx.io">http://vertx.io - Project homepage</a></li>
+						<li><a href="http://www.cubrid.org/blog/dev-platform/inside-vertx-comparison-with-nodejs/">http://www.cubrid.org/blog/dev-platform/inside-vertx-comparison-with-nodejs/</a> </li>
+						<li><a href="http://www.cubrid.org/blog/dev-platform/understanding-vertx-architecture-part-2/">http://www.cubrid.org/blog/dev-platform/understanding-vertx-architecture-part-2/</a> </li>
+						<li><a href="https://www.youtube.com/watch?v=8ClYUo_A3h0">This isn't your Dad's Node! (Video)</a> </li>
+						<li><a href="https://www.youtube.com/watch?v=3hv4QD5ZvKE">Tim Fox: Introducing Vert.x 2.0 - Taking Polyglot Application Development to the Next Level (Video)</a> </li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>THE END</h1>
+					<ul>
+						<li>Daniel Jahre <a href="mailto:daja@linuxwochen.at">daja@linuxwochen.at</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js">Reveal.js library for the slides</a></li>
+					</ul>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'zoom', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+			Reveal.configure(
+					{ slideNumber: true}
+			)
+		</script>
+
+	</body>
+</html>
