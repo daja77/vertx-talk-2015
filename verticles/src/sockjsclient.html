@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+ <script src="js/sockjs.min.js"></script>
+<script src="js/vertxbus-2.1.js"></script>
+
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+
+<h1>Vert.x Example</h1>
+
+<div id="vertx-created"></div>
+<div id="timestamp"></div>
+
+<script language="JavaScript">
+        var eb;
+
+        eb = new vertx.EventBus('http://localhost:8080/eventbus');
+        document.getElementById("vertx-created").innerHTML = "vertx bus created";
+
+        eb.onopen = function () {
+
+            eb.send('browser', 'sockjsclient');
+
+            eb.registerHandler('datetimeupdate', function (message) {
+                document.getElementById("timestamp").innerHTML = "received a message: " + message;
+                console.log("received a message: " + message);
+            });
+
+            eb.onclose = function () {
+                eb = null;
+            };
+    }
+</script>
+</body>
+</html>
